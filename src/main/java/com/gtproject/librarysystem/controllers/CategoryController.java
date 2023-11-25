@@ -1,7 +1,9 @@
 package com.gtproject.librarysystem.controllers;
 
-import com.gtproject.librarysystem.models.Categories;
-import com.gtproject.librarysystem.models.CategoriesRepo;
+import com.gtproject.librarysystem.models.Category;
+import com.gtproject.librarysystem.models.CategoryRepo;
+import com.gtproject.librarysystem.models.Student;
+import com.gtproject.librarysystem.models.StudentRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,31 +16,23 @@ import java.util.Optional;
 public class CategoryController {
 
     @Autowired
-    private CategoriesRepo categoryRepository;
+    private CategoryRepo categoryRepo; // Replace with your actual service or repository
 
-    // Get all categories
+    // GET endpoint to retrieve all categories
     @GetMapping
-    public Iterable<Categories> getAllCategories() {
-        return categoryRepository.findAll();
+    public Iterable<Category> getAllCategories() {
+        return categoryRepo.findAll();
     }
 
-    // Get a specific category by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<Categories> getCategoryById(@PathVariable int id) {
-        Optional<Categories> optionalCategory = categoryRepository.findById(id);
-        return optionalCategory.map(category -> new ResponseEntity<>(category, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    // Create a new category
+    // POST endpoint to create a new category
     @PostMapping
-    public ResponseEntity<Categories> createCategory(@RequestBody Categories category) {
+    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
         try {
-            Categories savedCategory = categoryRepository.save(category);
+            Category savedCategory = categoryRepo.save(category);
             return new ResponseEntity<>(savedCategory, HttpStatus.CREATED);
         } catch (Exception e) {
+            // Handle exceptions and potential rollbacks
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
-

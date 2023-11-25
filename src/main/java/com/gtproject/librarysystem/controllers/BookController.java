@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -19,8 +20,13 @@ public class BookController {
 
     // Get all books
     @GetMapping
-    public Iterable<Book> getAllBooks() {
-        return bookRepo.findAll();
+    public ResponseEntity<Iterable<Book>> getAllBooks() {
+        Iterable<Book> books = bookRepo.findAll();
+        if (books.iterator().hasNext()) {
+            return new ResponseEntity<>(books, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     // Get a specific book by ID
@@ -31,15 +37,20 @@ public class BookController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    // Create a new book
+    // POST endpoint to create a new book
     @PostMapping
     public ResponseEntity<Book> createBook(@RequestBody Book book) {
         try {
+            // Make sure to set the category of the book based on its ID
+            // Example: book.setCategory(categoryService.findById(book.getCategory().getId()));
+
             Book savedBook = bookRepo.save(book);
             return new ResponseEntity<>(savedBook, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 }
 

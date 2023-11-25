@@ -1,26 +1,25 @@
 package com.gtproject.librarysystem.models;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 
-
 @Entity
-@Table(name = "categories")
-public class Categories {
+@Table(name = "category")
+public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
+
     private String name;
 
-    // Constructors, getters, and setters
-
-    public Categories() {
+    public Category() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

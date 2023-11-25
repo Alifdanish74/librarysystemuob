@@ -1,5 +1,4 @@
 package com.gtproject.librarysystem.models;
-
 import jakarta.persistence.*;
 
 @Entity
@@ -9,12 +8,16 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
-    private String author;
-    private int category_id;
+    private String author;// Enum category
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;  // Entity category
     private int available_quantity;
     private int total_quantity;
     private int publication_year;
     private String isbn;
+    private String image;
 
     // Constructors, getters, and setters
 
@@ -46,12 +49,12 @@ public class Book {
         this.author = author;
     }
 
-    public int getCategory_id() {
-        return category_id;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategory_id(int category_id) {
-        this.category_id = category_id;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public int getAvailable_quantity() {
@@ -85,5 +88,14 @@ public class Book {
     public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }
+
 
