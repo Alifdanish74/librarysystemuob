@@ -8,16 +8,18 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String title;
-    private String author;// Enum category
+    private String author;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;  // Entity category
-    private int available_quantity;
+
     private int total_quantity;
+    private int available_quantity;
+
     private int publication_year;
     private String isbn;
-    private String image;
+    private String file_name;
 
     // Constructors, getters, and setters
 
@@ -89,12 +91,12 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public String getImage() {
-        return image;
+    public String getFile_name() {
+        return file_name;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setFile_name(String file_name) {
+        this.file_name = file_name;
     }
 }
 

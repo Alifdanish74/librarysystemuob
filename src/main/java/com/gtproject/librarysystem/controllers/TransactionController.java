@@ -1,9 +1,8 @@
 package com.gtproject.librarysystem.controllers;
 
-import com.gtproject.librarysystem.models.Book;
-import com.gtproject.librarysystem.models.BookRepo;
-import com.gtproject.librarysystem.models.Transaction;
-import com.gtproject.librarysystem.models.TransactionRepo;
+import com.gtproject.librarysystem.models.*;
+import com.gtproject.librarysystem.repo.BookRepo;
+import com.gtproject.librarysystem.repo.TransactionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +24,6 @@ public class TransactionController {
     @GetMapping
     public Iterable<Transaction> getAllTransactions() {
         return transRepo.findAll();
-
-
     }
 
     // Get a specific transaction by ID
@@ -46,6 +43,9 @@ public class TransactionController {
 
             // Set the due date based on your business logic
 
+            //Set the status to ISSUED
+            transaction.setStatus(String.valueOf(Status.ISSUED));
+
             // Save the transaction
             Transaction savedTransaction = transRepo.save(transaction);
 
@@ -64,7 +64,7 @@ public class TransactionController {
                 }
             });
 
-            // The transaction will be committed when this method completes successfully
+            // The transaction will be committed when this method success
 
             return new ResponseEntity<>(savedTransaction, HttpStatus.CREATED);
         } catch (Exception e) {
@@ -77,13 +77,16 @@ public class TransactionController {
     @PutMapping("/{transactionId}/return")
     public ResponseEntity<Transaction> returnBook(@PathVariable int transactionId) {
         try {
-            // Retrieve the transaction by ID
+            // Get the transaction by ID
             Optional<Transaction> optionalTransaction = transRepo.findById(transactionId);
             if (optionalTransaction.isPresent()) {
                 Transaction transaction = optionalTransaction.get();
 
                 // Update the return_date to the current date and time
                 transaction.setReturn_date(new Date());
+
+                //Set the status to RETURNED
+                transaction.setStatus(String.valueOf(Status.RETURNED));
 
                 // Save the updated transaction
                 Transaction updatedTransaction = transRepo.save(transaction);
